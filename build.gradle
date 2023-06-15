@@ -14,11 +14,14 @@ def runeLiteVersion = 'latest.release'
 
 dependencies {
 	compileOnly group: 'net.runelite', name:'client', version: runeLiteVersion
+	runtimeOnly group: 'com.example', name: 'example', version: '4.9+'
+	compileOnly group: 'com.example', name: 'example', version: '4.9+'
 
 	compileOnly 'org.projectlombok:lombok:1.18.20'
 	annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
 	testImplementation 'junit:junit:4.12'
+	testImplementation group: 'com.example', name: 'example', version: '4.9+'
 	testImplementation group: 'net.runelite', name:'client', version: runeLiteVersion
 	testImplementation group: 'net.runelite', name:'jshell', version: runeLiteVersion
 }
