@@ -17,7 +17,7 @@ import java.util.Set;
 
 @Slf4j
 @PluginDescriptor(
-		name = "Example"
+		name = "<html><font color=#c513ff>Hyps</font> Eater</html>"
 )
 public class HypsEaterPlugin extends Plugin
 {
