@@ -46,7 +46,7 @@ public class HypsEaterPlugin extends Plugin {
 
 			InventoryInteraction.useItem(foodToEat,"Eat");
 		}else{
-			System.out.println("No Ediles");
+			System.out.println("No Edibles");
 		}
 	}
 
