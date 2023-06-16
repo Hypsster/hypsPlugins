@@ -7,48 +7,59 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.*;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.StatChanged;
+import net.runelite.api.widgets.Widget;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
+import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import com.example.InventoryUtils.InventoryChecker;
 
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @PluginDescriptor(
 		name = "Example"
 )
-public class HypsEaterPlugin extends Plugin
-{
-	private final Set<Integer> EDIBLE_FOODS = Set.of(ItemID.ADMIRAL_PIE,ItemID.HALF_AN_ADMIRAL_PIE,ItemID.ANCHOVIES,ItemID.ANCHOVY_PIZZA,ItemID._12_ANCHOVY_PIZZA,ItemID.ANGLERFISH);
-
+public class HypsEaterPlugin extends Plugin {
 	@Inject
 	private Client client;
 
 	@Inject
 	private HypsEaterConfig config;
 
+	@Inject
+	private ItemManager itemManager;
+
+
+	String[] menuActions = {"Eat"};
 
 	@Subscribe
-	public void onGameTick(GameTick gameTick)
-	{
+	public void onGameTick(GameTick gameTick) {
 		int hp = client.getBoostedSkillLevel(Skill.HITPOINTS);
 
-		if (hp<config.eatAtHP() && InventoryChecker.contains(client, EDIBLE_FOODS))
+		if (InventoryChecker.inventoryContainsEdibleFoods())
 		{
-			InventoryInteraction.useItem(EDIBLE_FOODS, "Eat");
-			System.out.println("Eating");
+			int foodToEat = InventoryChecker.findItemWithEatOption();
+			System.out.println(foodToEat);
+
+			InventoryInteraction.useItem(foodToEat,"Eat");
+		}else{
+			System.out.println("No Edibles");
 		}
 	}
+
+	private boolean hasEatOption(String menuAction) {
+			return menuAction != null && menuAction.contains("Eat");
+		}
 	@Subscribe
-	public void onStatChanged(StatChanged statChanged)
-	{
+	public void onStatChanged(StatChanged statChanged) {
 	}
 
 	@Provides
-	HypsEaterConfig provideConfig(ConfigManager configManager)
-	{
+	HypsEaterConfig provideConfig(ConfigManager configManager) {
 		return configManager.getConfig(HypsEaterConfig.class);
 	}
+
 }
